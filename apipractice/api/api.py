@@ -3,7 +3,6 @@ from flask import request,jsonify,render_template
 
 app=flask.Flask(__name__)
 app.config["DEBUG"]=True
-
 countries=[
 	{
 		'name':'Afghanistan',
@@ -217,13 +216,11 @@ def home():
 def api_all():
 	return jsonify(countries)
 
-@app.route('/api/v1/countries',methods=['GET'])
+@app.route('/api/v1/countries',methods=['POST'])
 def api_country():
-	if 'name' in request.args:
-		name=str(request.args['name'].capitalize())
-	else:
+	if request.form.get("country") == "":
 		return jsonify(countries)
-	
+	name = request.form.get("country").title()
 	results=[]
 
 	for country in countries:
@@ -231,5 +228,5 @@ def api_country():
 			results.append(country)
 	return jsonify(results)		
 
-
-app.run()
+if __name__ == "__main__":
+	app.run()
